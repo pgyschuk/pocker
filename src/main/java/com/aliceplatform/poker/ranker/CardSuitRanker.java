@@ -31,9 +31,9 @@ class CardSuitRanker implements Ranker {
         List<Card> cardList = cardGroups.get(0).getValue();
         boolean ordered = true;
         if (cardList.size() >= 5) {
-            Collections.sort(cardList, (card1, card2) -> card2.getCardRank().getValue() - card1.getCardRank().getValue());
+            Collections.sort(cardList, (card1, card2) -> card2.getCardRank().ordinal() - card1.getCardRank().ordinal());
             for (int i = 0; i < 4; i++) {
-                if (cardList.get(i).getCardRank().getValue() - cardList.get(i + 1).getCardRank().getValue() != 1) {
+                if (cardList.get(i).getCardRank().ordinal() - cardList.get(i + 1).getCardRank().ordinal() != 1) {
                     ordered = false;
                     break;
                 }

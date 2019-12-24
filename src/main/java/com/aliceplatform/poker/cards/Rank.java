@@ -1,5 +1,7 @@
 package com.aliceplatform.poker.cards;
 
+import java.util.Objects;
+
 /**
  * Representation of {@link HandRank} in pair with Highest card for this card combination
  */
@@ -26,11 +28,25 @@ public class Rank implements Comparable<Rank> {
         return "{" + handRank + ": highCardRank=" + highCardRank + "}";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rank rank = (Rank) o;
+        return handRank == rank.handRank &&
+                highCardRank == rank.highCardRank;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(handRank, highCardRank);
+    }
+
     /**
-     * All possible poker combination sorted from highest to lowest
+     * All possible poker combination sorted from lowest to highest
      */
     public enum HandRank {
-        ROYAL_FLASH, STRAIGHT_FLASH, FOUR_OF_A_KIND, FULL_HOUSE, FLUSH, STRAIGHT, TREE_OF_A_KIND, TWO_PAIR, ONE_PAIR, HIGH_CARD
+        HIGH_CARD, ONE_PAIR, TWO_PAIR, TREE_OF_A_KIND, STRAIGHT, FLUSH, FULL_HOUSE, FOUR_OF_A_KIND, STRAIGHT_FLASH, ROYAL_FLASH
     }
 }
 

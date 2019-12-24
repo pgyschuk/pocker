@@ -3,8 +3,8 @@ package com.aliceplatform.poker.ranker;
 import com.aliceplatform.poker.cards.Card;
 import com.aliceplatform.poker.cards.Rank;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,9 +26,13 @@ class CardRankRanker implements Ranker {
         Rank rank;
         List<Map.Entry<Card.CardRank, List<Card>>> cardGroups = cards
                 .stream().collect(Collectors.groupingBy(Card::getCardRank)).entrySet()
-                .stream().sorted(Map.Entry.comparingByValue((cardList1, cardList2) -> cardList2.size() - cardList1.size()))
-                .sorted(Map.Entry.comparingByKey(Comparator.comparingInt(Card.CardRank::getValue)))
-                .collect(Collectors.toList());
+                .stream().sorted((entry1, entry2) -> {
+                    int result = entry2.getValue().size() - entry1.getValue().size();
+                    if (result == 0) {
+                        result = entry2.getKey().ordinal() - entry1.getKey().ordinal();
+                    }
+                    return result;
+                }).collect(Collectors.toList());
         if (cardGroups.get(0).getValue().size() == 4) {
             rank = new Rank(Rank.HandRank.FOUR_OF_A_KIND, cardGroups.get(0).getKey());
         } else if (cardGroups.get(0).getValue().size() == 3) {
@@ -37,32 +41,44 @@ class CardRankRanker implements Ranker {
             } else {
                 rank = new Rank(Rank.HandRank.TREE_OF_A_KIND, cardGroups.get(0).getKey());
             }
+            Rank straightOrHighCard = checkForStraight(cards);
+            if (straightOrHighCard.compareTo(rank) > 0) {
+                rank = straightOrHighCard;
+            }
         } else if (cardGroups.get(0).getValue().size() == 2) {
             if (cardGroups.get(1).getValue().size() == 2) {
                 rank = new Rank(Rank.HandRank.TWO_PAIR, cardGroups.get(0).getKey());
             } else {
                 rank = new Rank(Rank.HandRank.ONE_PAIR, cardGroups.get(0).getKey());
             }
+            Rank straightOrHighCard = checkForStraight(cards);
+            if (straightOrHighCard.compareTo(rank) > 0) {
+                rank = straightOrHighCard;
+            }
         } else {
-            Collections.sort(cards, (card1, card2) -> card2.getCardRank().getValue() - card1.getCardRank().getValue());
-            int numberOfOrderedCards = 1;
-            Card highCard = null;
-            for (int i = 0; i < cards.size() - 1; i++) {
-                if (cards.get(i).getCardRank().getValue() - cards.get(i + 1).getCardRank().getValue() == 1) {
-                    numberOfOrderedCards++;
-                    if(numberOfOrderedCards==5){
-                        highCard = cards.get(i-4);
-                    }
-                }
-            }
-            if (numberOfOrderedCards >= 5) {
-                rank = new Rank(Rank.HandRank.STRAIGHT, highCard.getCardRank());
-            } else {
-                rank = new Rank(Rank.HandRank.HIGH_CARD, cards.get(0).getCardRank());
-            }
-
+            rank = checkForStraight(cards);
         }
         return rank;
+    }
+
+    private Rank checkForStraight(List<Card> cards) {
+        List<Card> sortedCards = new ArrayList<>(cards);
+        Collections.sort(sortedCards, (card1, card2) -> card2.getCardRank().ordinal() - card1.getCardRank().ordinal());
+        int numberOfOrderedCards = 1;
+        Card highCard = null;
+        for (int i = 0; i < sortedCards.size() - 1; i++) {
+            if (sortedCards.get(i).getCardRank().ordinal() - sortedCards.get(i + 1).getCardRank().ordinal() == 1) {
+                numberOfOrderedCards++;
+                if (numberOfOrderedCards == 5) {
+                    highCard = sortedCards.get(i - 3);
+                }
+            }
+        }
+        if (numberOfOrderedCards >= 5) {
+            return new Rank(Rank.HandRank.STRAIGHT, highCard.getCardRank());
+        } else {
+            return new Rank(Rank.HandRank.HIGH_CARD, sortedCards.get(0).getCardRank());
+        }
     }
 
 }
