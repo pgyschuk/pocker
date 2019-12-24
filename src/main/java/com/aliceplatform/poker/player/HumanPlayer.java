@@ -14,7 +14,7 @@ public class HumanPlayer extends Player {
 
     @Override
     public Action doAction() {
-        System.out.println(String.format("%s, What is your next step, enter number? (0)FOLD, (1)CHECK_OR_CALL, (2)RAISE", this.name));
+        System.out.println(String.format("%s, What is your next step, enter number? (0)FOLD, (1)CHECK_OR_CALL, (2)RAISE", this.identifier));
         int intAction = scanner.nextInt();
         Action action = Action.values()[intAction];
         switch (action) {

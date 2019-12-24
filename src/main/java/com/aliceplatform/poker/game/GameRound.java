@@ -8,6 +8,7 @@ import com.aliceplatform.poker.ranker.CardRanker;
 import com.aliceplatform.poker.ranker.Ranker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +24,9 @@ public class GameRound {
     private int bank = 0;
     private int maxBid = 0;
     private int dealerIndex = -1;
-    int lastRaisedIndex = -1;
+    Player lastRaisedPlayer = null;
     private List<Player> activePlayers = new LinkedList<>();
+    private Map<Player, Integer> playerRoundBid = new HashMap<>();
 
     private List<Card> flop = new ArrayList<>(5);
     private Deck deck = new Deck();
@@ -45,12 +47,12 @@ public class GameRound {
         return activePlayers;
     }
 
-    public int getLastRaisedIndex() {
-        return lastRaisedIndex;
+    public Player getLastRaisedPlayer() {
+        return lastRaisedPlayer;
     }
 
-    public void setLastRaisedIndex(int lastRaisedIndex) {
-        this.lastRaisedIndex = lastRaisedIndex;
+    public void setLastRaisedPlayer(Player lastRaisedPlayer) {
+        this.lastRaisedPlayer = lastRaisedPlayer;
     }
 
     public void registerPlayer(Player player) {
@@ -69,6 +71,8 @@ public class GameRound {
         maxBid = 0;
         bank = 0;
         activePlayers.clear();
+        flop.clear();
+
         players.stream().forEach(player -> {
             if (player.getAccount() >= smallBlind) {
                 player.setCards(deck.getCards(2));
@@ -82,6 +86,14 @@ public class GameRound {
         winnerEvaluation();
     }
 
+    public int getPlayerRoundBid(Player player) {
+        return playerRoundBid.getOrDefault(player, 0);
+    }
+
+    public void addPlayerRoundBid(Player player, int value) {
+        playerRoundBid.put(player, playerRoundBid.getOrDefault(player, 0) + value);
+    }
+
     private void preFlop() {
         System.out.println("*** PreFlop ***");
         getActivePlayers().get(getSmallBlindIndex()).raise(smallBlind);
@@ -91,36 +103,43 @@ public class GameRound {
 
     private void flop() {
         System.out.println("*** Flop ***");
-        doDealerStepStep(3);
-        doPlayersActions(getPrevPlayerIndex(getSmallBlindIndex()));
+        doDealerStep(3);
+        doPlayersActions(dealerIndex);
     }
 
 
     private void turn() {
         System.out.println("*** Turm ***");
-        doDealerStepStep(1);
-        doPlayersActions(getPrevPlayerIndex(getSmallBlindIndex()));
+        doDealerStep(1);
+        doPlayersActions(dealerIndex);
     }
 
     private void river() {
         System.out.println("*** River ***");
-        doDealerStepStep(1);
-        doPlayersActions(getPrevPlayerIndex(getSmallBlindIndex()));
+        doDealerStep(1);
+        doPlayersActions(dealerIndex);
     }
 
-    private void doDealerStepStep(int numberOfCard) {
+    private void doDealerStep(int numberOfCard) {
         deck.getCards(1);
         flop.addAll(deck.getCards(numberOfCard));
         flop.forEach(card -> System.out.println(card));
-        lastRaisedIndex = dealerIndex + 1;
+
     }
 
     private void doPlayersActions(int startIndex) {
         int currentPlayerIndex = getNextPlayerIndex(startIndex);
-        while (getLastRaisedIndex() != currentPlayerIndex) {
-            getActivePlayers().get(currentPlayerIndex).doAction();
+        Player currentPlayer = activePlayers.get(currentPlayerIndex);
+        setLastRaisedPlayer(null);
+        do {
+            currentPlayer.doAction();
+            if (lastRaisedPlayer == null) {
+                setLastRaisedPlayer(currentPlayer);
+            }
             currentPlayerIndex = getNextPlayerIndex(currentPlayerIndex);
-        }
+            currentPlayer = activePlayers.get(currentPlayerIndex);
+
+        } while (activePlayers.size() > 1 && !currentPlayer.equals(getLastRaisedPlayer()));
     }
 
     private void winnerEvaluation() {
@@ -181,14 +200,6 @@ public class GameRound {
             return currentPlayerIndex + 1;
         } else {
             return 0;
-        }
-    }
-
-    private int getPrevPlayerIndex(int currentPlayerIndex) {
-        if (currentPlayerIndex - 1 >= 0) {
-            return currentPlayerIndex - 1;
-        } else {
-            return activePlayers.size() - 1;
         }
     }
 

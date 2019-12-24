@@ -4,6 +4,7 @@ import com.aliceplatform.poker.cards.Card;
 import com.aliceplatform.poker.game.GameRound;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Base implementation of game player.
@@ -12,13 +13,12 @@ import java.util.List;
  */
 public abstract class Player {
     protected int account = 10000;
-    protected final String name;
+    protected final String identifier;
     protected List<Card> cards;
     protected GameRound gameRound;
-    protected int gameRoundBid = 0;
 
-    public Player(String name) {
-        this.name = name;
+    public Player(String identifier) {
+        this.identifier = identifier;
     }
 
     public List<Card> getCards() {
@@ -29,7 +29,7 @@ public abstract class Player {
      * @param cards - Player hand cards
      */
     public void setCards(List<Card> cards) {
-        System.out.println(String.format("%s cards: [%s, %s]$", name, cards.get(0), cards.get(1)));
+        System.out.println(String.format("%s cards: [%s, %s]$", identifier, cards.get(0), cards.get(1)));
         this.cards = cards;
     }
 
@@ -77,7 +77,7 @@ public abstract class Player {
      */
     protected Action fold() {
         gameRound.unregisterPlayer(this);
-        System.out.println(String.format("Player: %s fold", name));
+        System.out.println(String.format("Player: %s fold", identifier));
         return Action.FOLD;
     }
 
@@ -87,12 +87,12 @@ public abstract class Player {
      * @return {@link Action#CHECK_OR_CALL} In case when Player have enough balance to cover maximum round bid or {@link Action#FOLD}
      */
     protected Action checkOrCall() {
-        int needToCall = gameRound.getMaxBid() - gameRoundBid;
+        int needToCall = gameRound.getMaxBid() - gameRound.getPlayerRoundBid(this);
         if (needToCall <= account) {
             gameRound.addToBank(needToCall);
-            gameRoundBid += needToCall;
+            gameRound.addPlayerRoundBid(this, needToCall);
             subtractAccount(needToCall);
-            System.out.println(String.format("Player: %s call adding %s$", name, needToCall));
+            System.out.println(String.format("Player: %s call adding %s$", identifier, needToCall));
             return Action.CHECK_OR_CALL;
         } else {
             return fold();
@@ -107,14 +107,14 @@ public abstract class Player {
      * @return {@link Action#RAISE} or value returned by delegate method
      */
     public Action raise(int amount) {
-        int needToCall = gameRound.getMaxBid() - gameRoundBid;
-        if (amount > needToCall && amount <= account && gameRound.getActivePlayers().indexOf(this) != gameRound.getLastRaisedIndex()) {
+        int needToCall = gameRound.getMaxBid() - gameRound.getPlayerRoundBid(this);
+        if (amount > needToCall && amount <= account && !this.equals(gameRound.getLastRaisedPlayer())) {
             gameRound.addToBank(amount);
-            gameRoundBid += amount;
-            gameRound.setMaxBid(gameRoundBid);
+            gameRound.addPlayerRoundBid(this, amount);
+            gameRound.setMaxBid(gameRound.getPlayerRoundBid(this));
             subtractAccount(amount);
-            gameRound.setLastRaisedIndex(gameRound.getActivePlayers().indexOf(this));
-            System.out.println(String.format("Player: %s raised %s$", name, amount));
+            gameRound.setLastRaisedPlayer(this);
+            System.out.println(String.format("Player: %s raised %s$", identifier, amount));
             return Action.RAISE;
         } else {
             return checkOrCall();
@@ -130,6 +130,19 @@ public abstract class Player {
 
     @Override
     public String toString() {
-        return "{" + name + ": account=" + account + "}";
+        return "{" + identifier + ": account=" + account + "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(identifier, player.identifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(identifier);
     }
 }
