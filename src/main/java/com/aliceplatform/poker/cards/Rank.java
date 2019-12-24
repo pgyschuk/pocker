@@ -46,7 +46,7 @@ public class Rank implements Comparable<Rank> {
      * All possible poker combination sorted from lowest to highest
      */
     public enum HandRank {
-        HIGH_CARD, ONE_PAIR, TWO_PAIR, TREE_OF_A_KIND, STRAIGHT, FLUSH, FULL_HOUSE, FOUR_OF_A_KIND, STRAIGHT_FLASH, ROYAL_FLASH
+        HIGH_CARD, ONE_PAIR, TWO_PAIR, TREE_OF_A_KIND, STRAIGHT, FLUSH, FULL_HOUSE, FOUR_OF_A_KIND, STRAIGHT_FLUSH, ROYAL_FLUSH
     }
 }
 

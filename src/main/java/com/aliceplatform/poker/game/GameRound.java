@@ -8,7 +8,6 @@ import com.aliceplatform.poker.ranker.CardRanker;
 import com.aliceplatform.poker.ranker.Ranker;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -84,23 +83,27 @@ public class GameRound {
     }
 
     private void preFlop() {
+        System.out.println("*** PreFlop ***");
         getActivePlayers().get(getSmallBlindIndex()).raise(smallBlind);
         getActivePlayers().get(getBigBlindIndex()).raise(bigBlind);
         doPlayersActions(getBigBlindIndex());
     }
 
     private void flop() {
+        System.out.println("*** Flop ***");
         doDealerStepStep(3);
         doPlayersActions(getPrevPlayerIndex(getSmallBlindIndex()));
     }
 
 
     private void turn() {
+        System.out.println("*** Turm ***");
         doDealerStepStep(1);
         doPlayersActions(getPrevPlayerIndex(getSmallBlindIndex()));
     }
 
     private void river() {
+        System.out.println("*** River ***");
         doDealerStepStep(1);
         doPlayersActions(getPrevPlayerIndex(getSmallBlindIndex()));
     }
@@ -108,7 +111,6 @@ public class GameRound {
     private void doDealerStepStep(int numberOfCard) {
         deck.getCards(1);
         flop.addAll(deck.getCards(numberOfCard));
-        System.out.println("Flop Cards:");
         flop.forEach(card -> System.out.println(card));
         lastRaisedIndex = dealerIndex + 1;
     }
@@ -130,7 +132,7 @@ public class GameRound {
             return ranker.rank(allPlayerCards);
         }));
         List<Map.Entry<Player, Rank>> rankedPlayers = playerRankMap.entrySet().stream()
-                .sorted(Comparator.comparing(Map.Entry::getValue)).collect(Collectors.toList());
+                .sorted((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue())).collect(Collectors.toList());
         int numberOfWinners = 1;
         for (int i = 0; i < rankedPlayers.size(); i++) {
             if (i + 1 < rankedPlayers.size()) {
@@ -143,12 +145,16 @@ public class GameRound {
                 }
             }
         }
+
+        System.out.println("Winners:");
         for (int i = 0; i < numberOfWinners; i++) {
             Player winnerPlayer = rankedPlayers.get(i).getKey();
             winnerPlayer.replenishAccount(bank / numberOfWinners);
+            System.out.println(String.format("%s. %s - with %s", i + 1, rankedPlayers.get(i).getKey(), rankedPlayers.get(i).getValue()));
         }
 
-        for (int i = 0; i < rankedPlayers.size(); i++) {
+        System.out.println("Others:");
+        for (int i = numberOfWinners; i < rankedPlayers.size(); i++) {
             System.out.println(String.format("%s. %s - with %s", i + 1, rankedPlayers.get(i).getKey(), rankedPlayers.get(i).getValue()));
         }
     }

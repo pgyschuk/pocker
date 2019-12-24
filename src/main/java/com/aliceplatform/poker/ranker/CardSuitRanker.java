@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 /**
  * Card ranker responsible for identification of combinations based on {@link Card.Suit}:
- * {@link Rank.HandRank#ROYAL_FLASH},
+ * {@link Rank.HandRank#ROYAL_FLUSH},
  * {@link Rank.HandRank#STRAIGHT},
  * {@link Rank.HandRank#FLUSH}
  */
@@ -39,9 +39,9 @@ class CardSuitRanker implements Ranker {
                 }
             }
             if (cardList.get(0).getCardRank() == Card.CardRank.ACE && ordered) {
-                return new Rank(Rank.HandRank.ROYAL_FLASH, Card.CardRank.ACE);
+                return new Rank(Rank.HandRank.ROYAL_FLUSH, Card.CardRank.ACE);
             } else if (ordered) {
-                return new Rank(Rank.HandRank.STRAIGHT_FLASH, cardList.get(0).getCardRank());
+                return new Rank(Rank.HandRank.STRAIGHT_FLUSH, cardList.get(0).getCardRank());
             } else {
                 return new Rank(Rank.HandRank.FLUSH, cardList.get(0).getCardRank());
             }
