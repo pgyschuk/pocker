@@ -2,30 +2,30 @@ package com.aliceplatform.pocker.model;
 
 public class Card implements Comparable<Card> {
     private final Suit suit;
-    private final Character character;
+    private final CardRank cardRank;
 
-    public Card(Suit suit, Character character) {
+    public Card(Suit suit, CardRank cardRank) {
         this.suit = suit;
-        this.character = character;
+        this.cardRank = cardRank;
     }
 
     public Suit getSuit() {
         return suit;
     }
 
-    public Character getCharacter() {
-        return character;
+    public CardRank getCardRank() {
+        return cardRank;
     }
 
     public int compareTo(Card o) {
-        return this.character.value - o.character.value;
+        return this.cardRank.value - o.cardRank.value;
     }
 
     public enum Suit {
         DIAMOND, HEART, CLUB, SPADE
     }
 
-    public enum Character {
+    public enum CardRank {
         ACE(14), KING(13), QUEEN(12),
         JACK(11), TEN(10), NINE(9),
         EIGHT(8), SEVEN(7), SIX(6),
@@ -33,7 +33,7 @@ public class Card implements Comparable<Card> {
         TWO(2);
         private int value;
 
-        Character(int value) {
+        CardRank(int value) {
             this.value = value;
         }
 

@@ -20,7 +20,18 @@ public class Player {
         return cards;
     }
 
-    public enum HandRanking {
-        ROYAL_FLASH, STRAIGHT_FLASH, FOUR_OF_A_KING, FULL_HOUSE, FLUSH, STRAIGHT, TREE_OF_A_KING, TWO_PAIR, ONE_PAIR, HIGH_CARD
+    public enum HandRank {
+        ROYAL_FLASH, STRAIGHT_FLASH, FOUR_OF_A_KIND, FULL_HOUSE, FLUSH, STRAIGHT, TREE_OF_A_KIND, TWO_PAIR, ONE_PAIR, HIGH_CARD
     }
+
+    public static class Rank {
+        private final HandRank handRank;
+        private final Card.CardRank highCardRank;
+
+        public Rank(HandRank handRank, Card.CardRank highCardRank) {
+            this.handRank = handRank;
+            this.highCardRank = highCardRank;
+        }
+    }
+
 }

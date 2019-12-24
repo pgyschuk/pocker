@@ -6,5 +6,5 @@ import com.aliceplatform.pocker.model.Player;
 import java.util.List;
 
 public interface Ranker {
-    Player.HandRanking rank(List<Card> cards);
+    Player.Rank rank(List<Card> cards);
 }

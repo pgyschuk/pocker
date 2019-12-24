@@ -12,8 +12,8 @@ public class Deck {
         this.cards = new ArrayList<Card>(56);
 
         for(Card.Suit suit: Card.Suit.values()){
-            for(Card.Character character: Card.Character.values()){
-                cards.add(new Card(suit, character));
+            for(Card.CardRank cardRank : Card.CardRank.values()){
+                cards.add(new Card(suit, cardRank));
             }
         }
         Collections.shuffle(cards);
