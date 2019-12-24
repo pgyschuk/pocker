@@ -1,5 +1,8 @@
-package com.aliceplatform.pocker.model;
+package com.aliceplatform.poker.cards;
 
+/**
+ * Model representation of Playing card which contains combinations of {@link Suit} and {@link Rank}
+ */
 public class Card implements Comparable<Card> {
     private final Suit suit;
     private final CardRank cardRank;
@@ -42,5 +45,8 @@ public class Card implements Comparable<Card> {
         }
     }
 
-
+    @Override
+    public String toString() {
+        return "{" + suit + ":" + cardRank + '}';
+    }
 }

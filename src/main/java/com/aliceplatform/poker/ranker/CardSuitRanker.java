@@ -1,19 +1,29 @@
-package com.aliceplatform.pocker.ranker;
+package com.aliceplatform.poker.ranker;
 
-import com.aliceplatform.pocker.model.Card;
-import com.aliceplatform.pocker.model.Player;
+import com.aliceplatform.poker.cards.Card;
+import com.aliceplatform.poker.cards.Rank;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class CardSuitRanker implements Ranker {
+/**
+ * Card ranker responsible for identification of combinations based on {@link Card.Suit}:
+ * {@link Rank.HandRank#ROYAL_FLASH},
+ * {@link Rank.HandRank#STRAIGHT},
+ * {@link Rank.HandRank#FLUSH}
+ */
+class CardSuitRanker implements Ranker {
 
-    private Ranker nextRanker = new CardRankRanker();
+    private Ranker nextRanker;
+
+    public CardSuitRanker(Ranker nextRanker) {
+        this.nextRanker = nextRanker;
+    }
 
     @Override
-    public Player.Rank rank(List<Card> cards) {
+    public Rank rank(List<Card> cards) {
         List<Map.Entry<Card.Suit, List<Card>>> cardGroups = cards
                 .stream().collect(Collectors.groupingBy(Card::getSuit)).entrySet()
                 .stream().sorted(Map.Entry.comparingByValue((o1, o2) -> o2.size() - o1.size()))
@@ -29,11 +39,11 @@ public class CardSuitRanker implements Ranker {
                 }
             }
             if (cardList.get(0).getCardRank() == Card.CardRank.ACE && ordered) {
-                return new Player.Rank(Player.HandRank.ROYAL_FLASH, Card.CardRank.ACE);
+                return new Rank(Rank.HandRank.ROYAL_FLASH, Card.CardRank.ACE);
             } else if (ordered) {
-                return new Player.Rank(Player.HandRank.STRAIGHT_FLASH, cardList.get(0).getCardRank());
+                return new Rank(Rank.HandRank.STRAIGHT_FLASH, cardList.get(0).getCardRank());
             } else {
-                return new Player.Rank(Player.HandRank.FLUSH, cardList.get(0).getCardRank());
+                return new Rank(Rank.HandRank.FLUSH, cardList.get(0).getCardRank());
             }
         } else {
             return nextRanker.rank(cards);
