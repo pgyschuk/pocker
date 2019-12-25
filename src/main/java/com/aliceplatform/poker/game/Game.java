@@ -27,7 +27,7 @@ public class Game {
         invitePlayers();
         Scanner scanner = new Scanner(System.in);
         String continueGame = "Y";
-        while (continueGame.equalsIgnoreCase("y")){
+        while (continueGame.equalsIgnoreCase("y")) {
             gameRound.startRound(players);
             System.out.println("Do you want to continue Game?");
             continueGame = scanner.next();
@@ -36,12 +36,17 @@ public class Game {
     }
 
     private void invitePlayers() {
+        System.out.println("Max number of players is 22");
         while (numberOfMachinePlayers + numberOfRealPlayers < 2 || numberOfMachinePlayers + numberOfRealPlayers > 22) {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("How many machine players do you want to invite?");
-            numberOfMachinePlayers = scanner.nextInt();
-            System.out.println("How many real players do you want to invite?");
-            numberOfRealPlayers = scanner.nextInt();
+            try {
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("How many machine players do you want to invite?");
+                numberOfMachinePlayers = Integer.valueOf(scanner.next());
+                System.out.println("How many real players do you want to invite?");
+                numberOfRealPlayers = Integer.valueOf(scanner.next());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid value");
+            }
         }
         for (int i = 0; i < numberOfMachinePlayers; i++) {
             Player player = new MachinePlayer("MachinePlayer-" + i);

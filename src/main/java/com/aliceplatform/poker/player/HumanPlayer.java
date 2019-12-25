@@ -14,12 +14,10 @@ public class HumanPlayer extends Player {
 
     @Override
     public Action doAction() {
-        System.out.println(String.format("%s, What is your next step, enter number? (0)FOLD, (1)CHECK_OR_CALL, (2)RAISE", this.identifier));
-        int intAction = scanner.nextInt();
-        Action action = Action.values()[intAction];
+        Action action = readAction();
         switch (action) {
             case RAISE: {
-                int raiseAmount = raiseAmount();
+                int raiseAmount = readRaiseAmount();
                 return raise(raiseAmount);
             }
             case CHECK_OR_CALL: {
@@ -32,9 +30,31 @@ public class HumanPlayer extends Player {
         }
     }
 
-    private int raiseAmount() {
-        System.out.println("What is your raise amount? Enter integer number");
-        int raiseValue = scanner.nextInt();
+    private int readRaiseAmount() {
+        int raiseValue = 0;
+        while (raiseValue == 0) {
+            try {
+                System.out.println("What is your raise amount? Enter integer number");
+                raiseValue = Integer.valueOf(scanner.next());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid value");
+            }
+        }
         return raiseValue;
+    }
+
+    private Action readAction() {
+        int intAction = -1;
+        Action action = null;
+        while (intAction < 0 || intAction > 2) {
+            try {
+                System.out.println(String.format("%s, What is your next step, enter number? (0)FOLD, (1)CHECK_OR_CALL, (2)RAISE", this.identifier));
+                intAction = Integer.valueOf(scanner.next());
+                action = Action.values()[intAction];
+            } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                System.out.println("Invalid value");
+            }
+        }
+        return action;
     }
 }
