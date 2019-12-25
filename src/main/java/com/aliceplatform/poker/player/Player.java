@@ -2,6 +2,8 @@ package com.aliceplatform.poker.player;
 
 import com.aliceplatform.poker.cards.Card;
 import com.aliceplatform.poker.game.GameRound;
+import com.aliceplatform.poker.output.ConsoleOutputWriter;
+import com.aliceplatform.poker.output.OutputWriter;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,6 +14,7 @@ import java.util.Objects;
  * {@link #fold()},  {@link #checkOrCall()} or {@link #raise(int)}}
  */
 public abstract class Player {
+    private OutputWriter outputWriter = new ConsoleOutputWriter();
     protected int account = 10000;
     protected final String identifier;
     protected List<Card> cards;
@@ -29,7 +32,7 @@ public abstract class Player {
      * @param cards - Player hand cards
      */
     public void setCards(List<Card> cards) {
-        System.out.println(String.format("%s cards: [%s, %s]$", identifier, cards.get(0), cards.get(1)));
+        outputWriter.writeMessage("%s cards: [%s, %s]$", identifier, cards.get(0), cards.get(1));
         this.cards = cards;
     }
 
@@ -42,12 +45,14 @@ public abstract class Player {
 
     /**
      * Player decision
+     *
      * @return {@link Action#FOLD}, {@link Action#CHECK_OR_CALL} or {@link Action#CHECK_OR_CALL} depends on Player decision
      */
     public abstract Action doAction();
 
     /**
      * Method for subtraction from Player account
+     *
      * @param amount - value which will be subtracted from current balance
      */
     public void subtractAccount(int amount) {
@@ -56,6 +61,7 @@ public abstract class Player {
 
     /**
      * Method for replenishment of Player account
+     *
      * @param amount - value which will be added to current balance
      */
     public void replenishAccount(int amount) {
@@ -70,6 +76,13 @@ public abstract class Player {
     }
 
     /**
+     * @return player identifier
+     */
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    /**
      * Fold action is freewill decision of {@link Player} when Player do not want to continue game.
      * Placed Bids will be lost
      *
@@ -77,7 +90,7 @@ public abstract class Player {
      */
     protected Action fold() {
         gameRound.unregisterPlayer(this);
-        System.out.println(String.format("Player: %s fold", identifier));
+        outputWriter.writeMessage("Player: %s fold", identifier);
         return Action.FOLD;
     }
 
@@ -92,7 +105,7 @@ public abstract class Player {
             gameRound.addToBank(needToCall);
             gameRound.addPlayerRoundBid(this, needToCall);
             subtractAccount(needToCall);
-            System.out.println(String.format("Player: %s call adding %s$", identifier, needToCall));
+            outputWriter.writeMessage("Player: %s call adding %s$", identifier, needToCall);
             return Action.CHECK_OR_CALL;
         } else {
             return fold();
@@ -114,7 +127,7 @@ public abstract class Player {
             gameRound.setMaxBid(gameRound.getPlayerRoundBid(this));
             subtractAccount(amount);
             gameRound.setLastRaisedPlayer(this);
-            System.out.println(String.format("Player: %s raised %s$", identifier, amount));
+            outputWriter.writeMessage("Player: %s raised %s$", identifier, amount);
             return Action.RAISE;
         } else {
             return checkOrCall();

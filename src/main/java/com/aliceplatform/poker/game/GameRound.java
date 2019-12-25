@@ -3,6 +3,8 @@ package com.aliceplatform.poker.game;
 import com.aliceplatform.poker.cards.Card;
 import com.aliceplatform.poker.cards.Deck;
 import com.aliceplatform.poker.cards.Rank;
+import com.aliceplatform.poker.output.ConsoleOutputWriter;
+import com.aliceplatform.poker.output.OutputWriter;
 import com.aliceplatform.poker.player.Player;
 import com.aliceplatform.poker.ranker.CardRanker;
 import com.aliceplatform.poker.ranker.Ranker;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
  * Represent state of system for each round
  */
 public class GameRound {
+    OutputWriter outputWriter = new ConsoleOutputWriter();
     private int smallBlind = 1;
     private int bigBlind = smallBlind * 2;
     private int bank = 0;
@@ -95,27 +98,27 @@ public class GameRound {
     }
 
     private void preFlop() {
-        System.out.println("*** PreFlop ***");
+        outputWriter.writeMessage("*** PreFlop ***");
         getActivePlayers().get(getSmallBlindIndex()).raise(smallBlind);
         getActivePlayers().get(getBigBlindIndex()).raise(bigBlind);
         doPlayersActions(getBigBlindIndex());
     }
 
     private void flop() {
-        System.out.println("*** Flop ***");
+        outputWriter.writeMessage("*** Flop ***");
         doDealerStep(3);
         doPlayersActions(dealerIndex);
     }
 
 
     private void turn() {
-        System.out.println("*** Turm ***");
+        outputWriter.writeMessage("*** Turm ***");
         doDealerStep(1);
         doPlayersActions(dealerIndex);
     }
 
     private void river() {
-        System.out.println("*** River ***");
+        outputWriter.writeMessage("*** River ***");
         doDealerStep(1);
         doPlayersActions(dealerIndex);
     }
@@ -165,16 +168,16 @@ public class GameRound {
             }
         }
 
-        System.out.println("Winners:");
+        outputWriter.writeMessage("Winners:");
         for (int i = 0; i < numberOfWinners; i++) {
             Player winnerPlayer = rankedPlayers.get(i).getKey();
             winnerPlayer.replenishAccount(bank / numberOfWinners);
-            System.out.println(String.format("%s. %s - with %s", i + 1, rankedPlayers.get(i).getKey(), rankedPlayers.get(i).getValue()));
+            outputWriter.writeMessage("%s. %s - with %s", i + 1, rankedPlayers.get(i).getKey(), rankedPlayers.get(i).getValue());
         }
 
-        System.out.println("Others:");
+        outputWriter.writeMessage("Others:");
         for (int i = numberOfWinners; i < rankedPlayers.size(); i++) {
-            System.out.println(String.format("%s. %s - with %s", i + 1, rankedPlayers.get(i).getKey(), rankedPlayers.get(i).getValue()));
+            outputWriter.writeMessage("%s. %s - with %s", i + 1, rankedPlayers.get(i).getKey(), rankedPlayers.get(i).getValue());
         }
     }
 

@@ -1,5 +1,10 @@
 package com.aliceplatform.poker.game;
 
+import com.aliceplatform.poker.input.ConsoleInputReader;
+import com.aliceplatform.poker.input.InputReader;
+import com.aliceplatform.poker.input.PlayerInput;
+import com.aliceplatform.poker.output.ConsoleOutputWriter;
+import com.aliceplatform.poker.output.OutputWriter;
 import com.aliceplatform.poker.player.HumanPlayer;
 import com.aliceplatform.poker.player.MachinePlayer;
 import com.aliceplatform.poker.player.Player;
@@ -12,10 +17,11 @@ import java.util.Scanner;
  * Game Entry point
  */
 public class Game {
+    private OutputWriter outputWriter = new ConsoleOutputWriter();
+    private InputReader inputReader = new ConsoleInputReader();
+
     private List<Player> players = new ArrayList<>();
     private GameRound gameRound = new GameRound();
-    int numberOfMachinePlayers;
-    int numberOfRealPlayers;
 
 
     public static void main(String[] args) {
@@ -29,30 +35,19 @@ public class Game {
         String continueGame = "Y";
         while (continueGame.equalsIgnoreCase("y")) {
             gameRound.startRound(players);
-            System.out.println("Do you want to continue Game?");
+            outputWriter.writeMessage("Do you want to continue Game?");
             continueGame = scanner.next();
         }
-        System.out.println("Good bye!");
+        outputWriter.writeMessage("Good bye!");
     }
 
     private void invitePlayers() {
-        System.out.println("Max number of players is 22");
-        while (numberOfMachinePlayers + numberOfRealPlayers < 2 || numberOfMachinePlayers + numberOfRealPlayers > 22) {
-            try {
-                Scanner scanner = new Scanner(System.in);
-                System.out.println("How many machine players do you want to invite?");
-                numberOfMachinePlayers = Integer.valueOf(scanner.next());
-                System.out.println("How many real players do you want to invite?");
-                numberOfRealPlayers = Integer.valueOf(scanner.next());
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid value");
-            }
-        }
-        for (int i = 0; i < numberOfMachinePlayers; i++) {
+        PlayerInput playerConfiguration = inputReader.readPlayersConfiguration();
+        for (int i = 0; i < playerConfiguration.getNumberOfMachinePlayers(); i++) {
             Player player = new MachinePlayer("MachinePlayer-" + i);
             players.add(player);
         }
-        for (int i = numberOfMachinePlayers; i < numberOfMachinePlayers + numberOfRealPlayers; i++) {
+        for (int i = playerConfiguration.getNumberOfMachinePlayers(); i < playerConfiguration.getNumberOfMachinePlayers() + playerConfiguration.getNumberOfRealPlayers(); i++) {
             Player player = new HumanPlayer("HumanPlayer-" + i);
             players.add(player);
         }
