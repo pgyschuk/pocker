@@ -36,7 +36,7 @@ public class Game {
     }
 
     private void invitePlayers() {
-        while (numberOfMachinePlayers + numberOfRealPlayers < 2 || numberOfMachinePlayers + numberOfRealPlayers > 23) {
+        while (numberOfMachinePlayers + numberOfRealPlayers < 2 || numberOfMachinePlayers + numberOfRealPlayers > 22) {
             Scanner scanner = new Scanner(System.in);
             System.out.println("How many machine players do you want to invite?");
             numberOfMachinePlayers = scanner.nextInt();

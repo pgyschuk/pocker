@@ -1,6 +1,6 @@
 # Poker
 
-Console Texas Holdem Poker game which allow to play for up to 23 players, with Human and Machine players
+Console Texas Holdem Poker game which allow to play for up to 22 players, with Human and Machine players
 
 ## Getting Started
 
