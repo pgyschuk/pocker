@@ -62,23 +62,132 @@ Executable jar will be generated under `target` folder
 java -jar /Projects/poker/target/poker-1.0-SNAPSHOT.jar
 ```
 
-**Game is started!**
+**Output Example**
+
 ```
+MacBook-Pro pocker % java -jar /Projects/pocker/target/poker-1.0-SNAPSHOT.jar
 How many machine players do you want to invite?
-1
+3
 How many real players do you want to invite?
 1
-Player0 cards: [{HEART:TEN}, {SPADE:SIX}]$
-HumanPlayer1 cards: [{DIAMOND:TWO}, {SPADE:QUEEN}]$
-Player: HumanPlayer1 raised 1$
-Player: Player0 raised 2$
-HumanPlayer1, What is your next step, enter number? (0)FOLD, (1)CHECK_OR_CALL, (2)RAISE
+MachinePlayer-0 cards: [{CLUB:TWO}, {HEART:NINE}]$
+MachinePlayer-1 cards: [{HEART:ACE}, {HEART:THREE}]$
+MachinePlayer-2 cards: [{DIAMOND:FOUR}, {CLUB:SEVEN}]$
+HumanPlayer-3 cards: [{HEART:SEVEN}, {DIAMOND:SEVEN}]$
+*** PreFlop ***
+Player: MachinePlayer-1 raised 1$
+Player: MachinePlayer-2 raised 2$
+HumanPlayer-3, What is your next step, enter number? (0)FOLD, (1)CHECK_OR_CALL, (2)RAISE
 1
-Player: HumanPlayer1 call adding 1$
-Flop Cards:
-{HEART:EIGHT}
+Player: HumanPlayer-3 call adding 2$
+Player: MachinePlayer-0 call adding 2$
+Player: MachinePlayer-1 call adding 1$
+Player: MachinePlayer-2 call adding 0$
+*** Flop ***
+{SPADE:SEVEN}
+{HEART:TEN}
+{DIAMOND:TWO}
+Player: MachinePlayer-1 call adding 0$
+Player: MachinePlayer-2 call adding 0$
+HumanPlayer-3, What is your next step, enter number? (0)FOLD, (1)CHECK_OR_CALL, (2)RAISE
+2
+What is your raise amount? Enter integer number
+100
+Player: HumanPlayer-3 raised 100$
+Player: MachinePlayer-0 call adding 100$
+Player: MachinePlayer-1 call adding 100$
+Player: MachinePlayer-2 call adding 100$
+*** Turm ***
+{SPADE:SEVEN}
+{HEART:TEN}
+{DIAMOND:TWO}
 {HEART:TWO}
-{DIAMOND:THREE}
+Player: MachinePlayer-1 call adding 0$
+Player: MachinePlayer-2 call adding 0$
+HumanPlayer-3, What is your next step, enter number? (0)FOLD, (1)CHECK_OR_CALL, (2)RAISE
+1
+Player: HumanPlayer-3 call adding 0$
+Player: MachinePlayer-0 call adding 0$
+*** River ***
+{SPADE:SEVEN}
+{HEART:TEN}
+{DIAMOND:TWO}
+{HEART:TWO}
+{DIAMOND:TEN}
+Player: MachinePlayer-1 call adding 0$
+Player: MachinePlayer-2 call adding 0$
+HumanPlayer-3, What is your next step, enter number? (0)FOLD, (1)CHECK_OR_CALL, (2)RAISE
+1
+Player: HumanPlayer-3 call adding 0$
+Player: MachinePlayer-0 call adding 0$
+Winners:
+1. {HumanPlayer-3: account=10306} - with {FULL_HOUSE: highCardRank=SEVEN}
+Others:
+2. {MachinePlayer-0: account=9898} - with {FULL_HOUSE: highCardRank=TWO}
+3. {MachinePlayer-1: account=9898} - with {TWO_PAIR: highCardRank=TEN}
+4. {MachinePlayer-2: account=9898} - with {TWO_PAIR: highCardRank=TEN}
+Do you want to continue Game?
+y
+MachinePlayer-0 cards: [{SPADE:FOUR}, {CLUB:KING}]$
+MachinePlayer-1 cards: [{SPADE:SIX}, {CLUB:ACE}]$
+MachinePlayer-2 cards: [{DIAMOND:JACK}, {SPADE:ACE}]$
+HumanPlayer-3 cards: [{CLUB:SIX}, {CLUB:QUEEN}]$
+*** PreFlop ***
+Player: MachinePlayer-2 raised 1$
+Player: HumanPlayer-3 raised 2$
+Player: MachinePlayer-0 call adding 2$
+Player: MachinePlayer-1 call adding 2$
+Player: MachinePlayer-2 call adding 1$
+HumanPlayer-3, What is your next step, enter number? (0)FOLD, (1)CHECK_OR_CALL, (2)RAISE
+2
+What is your raise amount? Enter integer number
+200
+Player: HumanPlayer-3 raised 200$
+Player: MachinePlayer-0 call adding 200$
+Player: MachinePlayer-1 call adding 200$
+Player: MachinePlayer-2 call adding 200$
+*** Flop ***
+{DIAMOND:FIVE}
+{HEART:SIX}
+{SPADE:NINE}
+Player: MachinePlayer-2 call adding 0$
+HumanPlayer-3, What is your next step, enter number? (0)FOLD, (1)CHECK_OR_CALL, (2)RAISE
+1
+Player: HumanPlayer-3 call adding 0$
+Player: MachinePlayer-0 call adding 0$
+Player: MachinePlayer-1 call adding 0$
+*** Turm ***
+{DIAMOND:FIVE}
+{HEART:SIX}
+{SPADE:NINE}
+{SPADE:KING}
+Player: MachinePlayer-2 call adding 0$
+HumanPlayer-3, What is your next step, enter number? (0)FOLD, (1)CHECK_OR_CALL, (2)RAISE
+1
+Player: HumanPlayer-3 call adding 0$
+Player: MachinePlayer-0 call adding 0$
+Player: MachinePlayer-1 call adding 0$
+*** River ***
+{DIAMOND:FIVE}
+{HEART:SIX}
+{SPADE:NINE}
+{SPADE:KING}
+{HEART:EIGHT}
+Player: MachinePlayer-2 call adding 0$
+HumanPlayer-3, What is your next step, enter number? (0)FOLD, (1)CHECK_OR_CALL, (2)RAISE
+1
+Player: HumanPlayer-3 call adding 0$
+Player: MachinePlayer-0 call adding 0$
+Player: MachinePlayer-1 call adding 0$
+Winners:
+1. {MachinePlayer-0: account=10504} - with {ONE_PAIR: highCardRank=KING}
+Others:
+2. {HumanPlayer-3: account=10104} - with {ONE_PAIR: highCardRank=SIX}
+3. {MachinePlayer-1: account=9696} - with {ONE_PAIR: highCardRank=SIX}
+4. {MachinePlayer-2: account=9696} - with {HIGH_CARD: highCardRank=ACE}
+Do you want to continue Game?
+n
+Good bye!
 ```
 
 ## Authors

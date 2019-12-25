@@ -32,6 +32,7 @@ public class Game {
             System.out.println("Do you want to continue Game?");
             continueGame = scanner.next();
         }
+        System.out.println("Good bye!");
     }
 
     private void invitePlayers() {
