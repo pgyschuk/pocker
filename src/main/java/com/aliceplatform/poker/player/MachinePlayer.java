@@ -5,8 +5,8 @@ package com.aliceplatform.poker.player;
  */
 public class MachinePlayer extends Player {
 
-    public MachinePlayer(String name) {
-        super(name);
+    public MachinePlayer(String identifier) {
+        super(identifier);
     }
 
     @Override

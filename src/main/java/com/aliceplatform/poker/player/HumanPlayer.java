@@ -8,8 +8,8 @@ import java.util.Scanner;
 public class HumanPlayer extends Player {
     Scanner scanner = new Scanner(System.in);
 
-    public HumanPlayer(String name) {
-        super(name);
+    public HumanPlayer(String identifier) {
+        super(identifier);
     }
 
     @Override

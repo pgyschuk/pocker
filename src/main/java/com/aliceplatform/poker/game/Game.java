@@ -43,11 +43,11 @@ public class Game {
             numberOfRealPlayers = scanner.nextInt();
         }
         for (int i = 0; i < numberOfMachinePlayers; i++) {
-            Player player = new MachinePlayer("Player" + i);
+            Player player = new MachinePlayer("MachinePlayer-" + i);
             players.add(player);
         }
         for (int i = numberOfMachinePlayers; i < numberOfMachinePlayers + numberOfRealPlayers; i++) {
-            Player player = new HumanPlayer("HumanPlayer" + i);
+            Player player = new HumanPlayer("HumanPlayer-" + i);
             players.add(player);
         }
     }
