@@ -17,9 +17,12 @@ public static void main(String[] args) {
 
 * JDK 11
 * Maven
+* Docker
 
 
-### How to build
+## How to build
+
+### Manually
 
 **Open source root folder in console**
 
@@ -62,10 +65,24 @@ Executable jar will be generated under `target` folder
 java -jar /Projects/poker/target/poker-1.0-SNAPSHOT.jar
 ```
 
-**Output Example**
+## Bild with Docker
+
+**Open source root folder in console**
 
 ```
-MacBook-Pro pocker % java -jar /Projects/pocker/target/poker-1.0-SNAPSHOT.jar
+cd <project-path>/docker
+```
+
+**Run script**
+
+```
+./rundocker.sh
+```
+
+###Output Example
+
+```
+MacBook-Pro poker % java -jar /Projects/poker/target/poker-1.0-SNAPSHOT.jar
 How many machine players do you want to invite?
 3
 How many real players do you want to invite?
