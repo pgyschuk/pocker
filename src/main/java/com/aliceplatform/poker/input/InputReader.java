@@ -27,4 +27,10 @@ public interface InputReader {
      * @return object with information about number of players for next game
      */
     PlayerInput readPlayersConfiguration();
+
+    /**
+     * Reading player decision about next round of game
+     * @return true if player want to continue and false when player want to stop game
+     */
+    boolean readContinueGame();
 }

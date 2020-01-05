@@ -60,4 +60,16 @@ public class ConsoleInputReader implements InputReader {
         return result;
     }
 
+    @Override
+    public boolean readContinueGame() {
+        outputWriter.writeMessage("Do you want to continue Game? y/n");
+        String shouldContinue = String.valueOf(scanner.next());
+        boolean continueGame = shouldContinue.equalsIgnoreCase("y");
+        if(!continueGame){
+            outputWriter.writeMessage("Good bye!");
+            return false;
+        }
+        return true;
+    }
+
 }

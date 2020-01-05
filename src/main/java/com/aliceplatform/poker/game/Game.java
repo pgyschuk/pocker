@@ -3,21 +3,17 @@ package com.aliceplatform.poker.game;
 import com.aliceplatform.poker.input.ConsoleInputReader;
 import com.aliceplatform.poker.input.InputReader;
 import com.aliceplatform.poker.input.PlayerInput;
-import com.aliceplatform.poker.output.ConsoleOutputWriter;
-import com.aliceplatform.poker.output.OutputWriter;
 import com.aliceplatform.poker.player.HumanPlayer;
 import com.aliceplatform.poker.player.MachinePlayer;
 import com.aliceplatform.poker.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Game Entry point
  */
 public class Game {
-    private OutputWriter outputWriter = new ConsoleOutputWriter();
     private InputReader inputReader = new ConsoleInputReader();
 
     private List<Player> players = new ArrayList<>();
@@ -31,14 +27,11 @@ public class Game {
 
     public void start() {
         invitePlayers();
-        Scanner scanner = new Scanner(System.in);
-        String continueGame = "Y";
-        while (continueGame.equalsIgnoreCase("y")) {
+        boolean continueGame;
+        do {
             gameRound.startRound(players);
-            outputWriter.writeMessage("Do you want to continue Game?");
-            continueGame = scanner.next();
-        }
-        outputWriter.writeMessage("Good bye!");
+            continueGame = inputReader.readContinueGame();
+        } while (continueGame);
     }
 
     private void invitePlayers() {
